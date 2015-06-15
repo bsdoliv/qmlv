@@ -1,7 +1,0 @@
-title CAS Criar Ticket
-
-App->Ticket Class: Criar Ticket
-Ticket Class->DB: p_cas_i_wmexnewticket
-Ticket Class->DB: p_cas_i_atualizahistoricooperacao
-App->End App: Fim Criação Ticket
-

@@ -1,2 +1,0 @@
-horizontal animation
-    http://kunalmaemo.blogspot.com.br/2010/12/simple-view-switching-animation-with-qt.html
