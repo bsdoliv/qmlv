@@ -1,0 +1,18 @@
+title BENovoMovimento
+alt createNewTicket
+main->BENovoMovimento: instantiate
+main->DALTicket: instantiate
+
+main->BENovoMovimento: populate 
+main->+DALTicket: createNewTicket(BENovoMovimento)
+DALTicket->+DB: inserts
+DB->-DALTicket: returns out
+DALTicket->-main: returns out
+
+
+else novoMovimento
+main->BENovoMovimento: populate 
+main->+DALTicket: novoMovimento(&BENovoMovimento)
+DALTicket->+DB: inserts
+DB->-DALTicket: returns out
+DALTicket->-main: QList<BENovoMovimento>, out

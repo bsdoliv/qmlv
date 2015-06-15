@@ -1,0 +1,24 @@
+depends
+    libqt4-declarative:amd64                  
+    libqt4-network:amd64                      
+    libqt4-script:amd64                       
+    libqt4-scripttools:amd64                  
+    libqt4-sql:amd64                          
+    libqt4-sql-mysql:amd64                    
+    libqt4-sql-sqlite:amd64                   
+    libqt4-svg:amd64                          
+    libqt4-xml:amd64                          
+    libqt4-xmlpatterns:amd64                  
+    libqtcore4:amd64                          
+    libqtgui4:amd64                           
+    libqtwebkit4:amd64                        
+    qt4-qmlviewer                             
+
+deploy instructions
+    % tar -C /opt -zxvf ./casui.tgz
+    % sudo /opt/mysql56/bin/mysqld.sh start
+    % /opt/mysql56/bin/mysql -uroot --protocol tcp < /opt/casui/lib/deploy_cas_db_dump.sql
+
+starting
+    % sudo /opt/mysql56/bin/mysqld.sh start
+    % /opt/casui/bin/casui

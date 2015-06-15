@@ -1,0 +1,7 @@
+CasContainer    ./cascontainer.qml
+CasTicket       ./ticket.qml
+CasLogin        ./login.qml
+CasErrorMessage ./widgets/errormessage.qml
+CasTicketClose  ./ticketclose.qml
+CasConfirmNewTicket ./widgets/confirmnewticket.qml
+CasConfirmAddCreditTicket ./widgets/confirmaddcreditticket.qml

@@ -1,0 +1,12 @@
+#ifndef CORECOMMOM_GLOBAL_H
+#define CORECOMMOM_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(CORECOMMOM_LIBRARY)
+#  define CORECOMMOMSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define CORECOMMOMSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // CORECOMMOM_GLOBAL_H

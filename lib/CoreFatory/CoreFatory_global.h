@@ -1,0 +1,12 @@
+#ifndef COREFATORY_GLOBAL_H
+#define COREFATORY_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(COREFATORY_LIBRARY)
+#  define COREFATORYSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define COREFATORYSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // COREFATORY_GLOBAL_H

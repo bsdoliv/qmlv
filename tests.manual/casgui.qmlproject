@@ -1,0 +1,14 @@
+import QmlProject 1.1
+
+Project {
+    QmlFiles {
+        directory: ['qml', 'qml/lib']
+    }
+    ImageFiles {
+        directory: ['qml', 'qml/images']
+    }
+    JavaScriptFiles {
+        directory: ['qml', 'qml/lib', 'qml/lib/calculator']
+    }
+}
+// vim: set ts=4 sw=4 et ft=javascript:

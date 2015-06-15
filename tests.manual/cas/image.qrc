@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="Login.Box.jpg">Images/Login.Box.jpg</file>
+        <file alias="LoginCashControl.png">Images/LoginCashControl.png</file>
+    </qresource>
+</RCC>

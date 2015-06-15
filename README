@@ -1,0 +1,46 @@
+dev-deps:
+    % apt-get install qt-sdk libqt4-sql-mysql
+   
+dev-setup:
+    % export MYSQL_USER=root
+    % export MYSQL_PASSWD=senha_maldita_de_banco
+
+        or
+
+    # include vars on mk/vars.mk 
+
+building:
+    % make build
+
+building & running tests:
+    % make tests
+
+db targets:
+    start/stop
+    % make dbstart
+    % make dbstop
+
+    create/drop
+    % make dbcreate
+    % make dbdown
+
+    connect to db through mysql cli 
+    % make dbcli
+
+run (qmake build):
+    % cd qtcreator
+    % qmake && make
+    % cd ../bin/casui
+    % ./casui
+    
+        or
+
+    % qtcreator ./qtcreator/qtcas.pro
+    then click "play"
+
+deploy package build:
+    % make package
+
+        or
+
+    % make build package
