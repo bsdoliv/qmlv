@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2011-2015 Andre de Oliveira <deoliveirambx@googlemail.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF MIND, USE, DATA OR PROFITS, WHETHER
+ * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+ * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
 /****************************************************************************
 **
 ** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
@@ -39,7 +55,7 @@
 ****************************************************************************/
 
 #include "qmlappviewer.h"
-#include "casapplication.h"
+#include "qmlappv.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
@@ -209,13 +225,13 @@ void QmlAppViewer::setOrientation(ScreenOrientation orientation)
 void QmlAppViewer::showExpanded(int mode)
 {
     switch (mode) {
-    case CASApplication::FullScreen:
+    case QmlAppv::FullScreen:
         d->view->showFullScreen();
         break;
-    case CASApplication::Maximized:
+    case QmlAppv::Maximized:
         d->view->showMaximized();
         break;
-    case CASApplication::Normal:
+    case QmlAppv::Normal:
         d->view->show();
         break;
     }

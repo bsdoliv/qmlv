@@ -1,17 +1,33 @@
+/*
+ * Copyright (c) 2011-2015 Andre de Oliveira <deoliveirambx@googlemail.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF MIND, USE, DATA OR PROFITS, WHETHER
+ * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+ * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
 #include <QDebug>
-#include <QGraphicsObject> // dynamic_cast from QGraphicsObject to QObject
+#include <QGraphicsObject> /* dynamic_cast from QGraphicsObject to QObject */
 #include <QMetaMethod>
 #include <QStringBuilder>
 #include <QVariant>
 
-#include "casapplication.h"
+#include "qmlappv.h"
 #include "cashandlerbase.h"
-#include "casviewbase.h"
+#include "qmlappvbase.h"
 #include "qmlappviewer.h"
 
-struct CASApplicationPrivate 
+struct QmlAppvPrivate 
 {
-    typedef QHash<QString, const CASViewBase *> ViewsMap;
+    typedef QHash<QString, const QmlAppvBase *> ViewsMap;
     typedef QHash<QString, QObject *> ControllersMap;
 
     QmlAppViewer display;
@@ -19,34 +35,33 @@ struct CASApplicationPrivate
     QObject *view_root_object;
     ViewsMap views;
     ControllersMap controllers;
-    CASData::DisplayStatesMap display_states;
+    QmlAppvData::DisplayStatesMap display_states;
     int show_mode;
-//    CASData::Session session;
 };
 
 void
-CASApplication::init(int sm)
+QmlAppv::init(int sm)
 {
     d->current_state = -1;
     d->show_mode = sm;
 }
 
-CASApplication::CASApplication(int argc, char **argv, enum showMode sm) :
+QmlAppv::QmlAppv(int argc, char **argv, enum showMode sm) :
     QApplication(argc, argv),
-    d(new CASApplicationPrivate)
+    d(new QmlAppvPrivate)
 {
     init(sm);
 }
 
-CASApplication::CASApplication(int argc, char **argv) : 
+QmlAppv::QmlAppv(int argc, char **argv) : 
     QApplication(argc, argv),
-    d(new CASApplicationPrivate)
+    d(new QmlAppvPrivate)
 { 
     init();
 }
 
 void
-CASApplication::setDisplayQml(const QString &path)
+QmlAppv::setDisplayQml(const QString &path)
 {
     QApplication::setApplicationName(qApp->argv()[0]);
 
@@ -58,13 +73,13 @@ CASApplication::setDisplayQml(const QString &path)
 }
 
 int
-CASApplication::exec()
+QmlAppv::exec()
 {
     return QApplication::exec();
 }
 
 void
-CASApplication::registerHandler(const QString &view_id, const QObject *_handler)
+QmlAppv::registerHandler(const QString &view_id, const QObject *_handler)
 {
     d->controllers.insert(view_id, const_cast<QObject *>(_handler));
 
@@ -104,11 +119,11 @@ CASApplication::registerHandler(const QString &view_id, const QObject *_handler)
     }
 
     // encapsulates view
-    d->views.insert(view_id, new CASViewBase(viewo));
+    d->views.insert(view_id, new QmlAppvBase(viewo));
 }
 
 void
-CASApplication::setDisplayState(int s)
+QmlAppv::setDisplayState(int s)
 {
     if (d->current_state == s)
         return;
@@ -122,7 +137,7 @@ CASApplication::setDisplayState(int s)
 }
 
 void
-CASApplication::renderView(const QString &view_id, const CASData::ViewResponse *resp)
+QmlAppv::renderView(const QString &view_id, const QmlAppvData::ViewResponse *resp)
 {
     DEBUGME() << "resp" << resp;
     QObject *o = lookupViewByName(view_id);
@@ -141,35 +156,35 @@ CASApplication::renderView(const QString &view_id, const CASData::ViewResponse *
 }
 
 QObject *
-CASApplication::lookupViewByName(const QString &view_id)
+QmlAppv::lookupViewByName(const QString &view_id)
 {
     return d->view_root_object->findChild<QObject *>(view_id);
 }
 
 void
-CASApplication::router()
+QmlAppv::router()
 {
-    return router(static_cast<CASData::ViewRequest *>(0));
+    return router(static_cast<QmlAppvData::ViewRequest *>(0));
 }
 
 void
-CASApplication::router(QVariant data)
+QmlAppv::router(QVariant data)
 {
     // dump first
-    //CASData::dumpVariant(&data);
-    return router(new CASData::ViewRequest(data));
+    //QmlAppvData::dumpVariant(&data);
+    return router(new QmlAppvData::ViewRequest(data));
 }
 
 void
-CASApplication::router(CASData::ViewRequest *request)
+QmlAppv::router(QmlAppvData::ViewRequest *request)
 {
 #if 0
     if (data)
-        CASData::dump(data);
+        QmlAppvData::dump(data);
 #endif
     bool delreq = false;
     if (! request) {
-        request = new CASData::ViewRequest;
+        request = new QmlAppvData::ViewRequest;
         delreq = true;
     }
 
@@ -199,7 +214,7 @@ CASApplication::router(CASData::ViewRequest *request)
      *      signalName: "loginSubmit"
      */
     const char *method = QString("on_%1").arg(signal).toAscii().constData();
-    CASData::ViewResponse response;
+    QmlAppvData::ViewResponse response;
     request->current_state = d->current_state;
     o->setResponse(&response);
     o->setRequest(request);
@@ -228,7 +243,7 @@ CASApplication::router(CASData::ViewRequest *request)
 }
 
 void
-CASApplication::setDisplayStatesMap(const CASData::DisplayStatesMap *m)
+QmlAppv::setDisplayStatesMap(const QmlAppvData::DisplayStatesMap *m)
 {
     d->display_states = *m;
 }
