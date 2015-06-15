@@ -21,7 +21,7 @@
 
 #include "qmlappvdata.h"
 
-class CASHandlerBase : public QObject
+class QmlAppvHandlerBase  : public QObject
 {
     Q_OBJECT
 public:
@@ -57,7 +57,6 @@ protected:
     QmlAppvData::ViewResponse   *respn;
 
     const QmlAppvData::ViewRequest &request() { return *reqst; }
-//    const QmlAppvData::ViewRequest *request() { return reqst; }
     QmlAppvData::ViewResponse *response() { return respn; }
 };
 

@@ -21,7 +21,7 @@
 #include <QVariant>
 
 #include "qmlappv.h"
-#include "cashandlerbase.h"
+#include "qmlappvhandlerbase.h"
 #include "qmlappvbase.h"
 #include "qmlappviewer.h"
 
@@ -146,7 +146,7 @@ QmlAppv::renderView(const QString &view_id, const QmlAppvData::ViewResponse *res
         DEBUGME() << "object" << view_id << "not found";
         return;
     }
-//    DEBUGME() << "object" << o->objectName();
+    DEBUGME() << "object" << o->objectName();
     bool r = QMetaObject::invokeMethod(const_cast<QObject *>(o), 
                               "render",
                               Q_ARG(QVariant, static_cast<QVariant>(*resp)));
@@ -195,8 +195,8 @@ QmlAppv::router(QmlAppvData::ViewRequest *request)
     int c = signal.indexOf("(");
     signal = signal.left(c);
 
-    CASHandlerBase *o = 
-        reinterpret_cast<CASHandlerBase *>(d->controllers.value(sender_id));
+    QmlAppvHandlerBase *o =
+        reinterpret_cast<QmlAppvHandlerBase *>(d->controllers.value(sender_id));
     DEBUGME() << "controllers" << d->controllers;
 
     if (!o) { 
