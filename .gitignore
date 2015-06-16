@@ -1,3 +1,5 @@
 *.makefile
 *.pro
 *.a
+.mocs
+.objs
