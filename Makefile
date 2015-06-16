@@ -2,10 +2,8 @@
 export QTDIR?=/opt/qt486
 QMAKE=${QTDIR}/bin/qmake
 
-TARGET=qmlappv
+TARGET=qmlv
 VERSION=0.1
-PACKAGE=${TARGET}-${VERSION}.tgz
-QUICKPACKAGE=${TARGET}-${VERSION}.zip
 
 QMAKEFILE=${TARGET}.makefile
 QMAKEPRO=${TARGET}.pro
@@ -64,9 +62,3 @@ clean:
 prunebuild:
 	-rm -fv ${QMAKEFILE}
 	-rm -fv ${QMAKEPRO}
-
-.PHONY: build
-build:
-	@true
-
-# vim: set tw=78:
