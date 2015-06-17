@@ -1,4 +1,4 @@
-#include "casapplication/casapplication.h"
+#include "qmlappv.h"
 
 #include "casuidata.h"
 #include "tickethandler.h"
@@ -8,43 +8,58 @@
 int
 main(int argc, char **argv)
 {
-    CASApplication casapp(argc, argv, CASApplication::Maximized);
+	QmlAppv				qapp(argc, argv, QmlAppv::Maximized);
+	QmlAppvData::DisplayStatesMap	map;
+	LoginHandler			loginhdlr;
+	HomeHandler			homehdlr;
+	TicketHandler			tickethdlr;
 
-    CASData::DisplayStatesMap map;
-//    map.insert(TicketNew, CASData::StatesValue("ticketNew", "ticketQmlView"));
-    // same states names from qml
-    map.insert(Login,                        CASData::StatesValue("login", "loginQmlView"));
-    map.insert(Home,                         CASData::StatesValue("home", "homeQmlView"));
-    map.insert(TicketKeyboard,               CASData::StatesValue("TicketKeyboard", "ticketQmlView"));
-    map.insert(TicketDialogConfirm,          CASData::StatesValue("TicketDialogConfirm", "ticketQmlView"));
-    map.insert(TicketAddCodeKeyboard,        CASData::StatesValue("TicketAddCodeKeyboard", "ticketQmlView"));
-    map.insert(TicketAddCreditDialogConfirm, CASData::StatesValue("TicketAddCreditDialogConfirm", "ticketQmlView"));
-    map.insert(TicketAddCreditKeyboard,      CASData::StatesValue("TicketAddCreditKeyboard", "ticketQmlView"));
-    map.insert(TicketAddCredit,              CASData::StatesValue("TicketAddCredit", "ticketQmlView"));
-    map.insert(TicketCloseCodeKeyboard,      CASData::StatesValue("TicketCloseCodeKeyboard", "ticketQmlView"));
-    map.insert(TicketCloseValidateCode,      CASData::StatesValue("TicketCloseValidateCode", "ticketQmlView"));
-    map.insert(TicketCloseConfirm,           CASData::StatesValue("TicketCloseConfirm", "ticketQmlView"));
-    map.insert(People,                       CASData::StatesValue("People", "homeQmlView"));
-    map.insert(Close,                        CASData::StatesValue("Close", "homeQmlView"));
-    map.insert(Consult,                      CASData::StatesValue("Consult", "homeQmlView"));
-    map.insert(Accounting,                   CASData::StatesValue("Accounting", "homeQmlView"));
-    map.insert(File,                         CASData::StatesValue("File", "homeQmlView"));
-    map.insert(Config,                       CASData::StatesValue("Config", "homeQmlView"));
-    map.insert(Cash,                         CASData::StatesValue("Cash", "homeQmlView"));
+	/* same states names from qml */
+	map.insert(Login, QmlAppvData::StatesValue("login", "loginQmlView"));
+	map.insert(Home, QmlAppvData::StatesValue("home", "homeQmlView"));
+	map.insert(TicketKeyboard, QmlAppvData::StatesValue("TicketKeyboard",
+	    "ticketQmlView"));
+	map.insert(TicketDialogConfirm,
+	    QmlAppvData::StatesValue("TicketDialogConfirm", "ticketQmlView"));
+	map.insert(TicketAddCodeKeyboard,
+	    QmlAppvData::StatesValue("TicketAddCodeKeyboard",
+	    "ticketQmlView"));
+	map.insert(TicketAddCreditDialogConfirm,
+	    QmlAppvData::StatesValue("TicketAddCreditDialogConfirm",
+	    "ticketQmlView"));
+	map.insert(TicketAddCreditKeyboard,
+	    QmlAppvData::StatesValue("TicketAddCreditKeyboard",
+	    "ticketQmlView"));
+	map.insert(TicketAddCredit, QmlAppvData::StatesValue("TicketAddCredit",
+	    "ticketQmlView"));
+	map.insert(TicketCloseCodeKeyboard,
+	    QmlAppvData::StatesValue("TicketCloseCodeKeyboard",
+	    "ticketQmlView"));
+	map.insert(TicketCloseValidateCode,
+	    QmlAppvData::StatesValue("TicketCloseValidateCode",
+	    "ticketQmlView"));
+	map.insert(TicketCloseConfirm,
+	    QmlAppvData::StatesValue("TicketCloseConfirm",
+	    "ticketQmlView"));
+	map.insert(People, QmlAppvData::StatesValue("People", "homeQmlView"));
+	map.insert(Close, QmlAppvData::StatesValue("Close", "homeQmlView"));
+	map.insert(Consult, QmlAppvData::StatesValue("Consult",
+	    "homeQmlView"));
+	map.insert(Accounting,
+	    QmlAppvData::StatesValue("Accounting", "homeQmlView"));
+	map.insert(File, QmlAppvData::StatesValue("File", "homeQmlView"));
+	map.insert(Config, QmlAppvData::StatesValue("Config", "homeQmlView"));
+	map.insert(Cash, QmlAppvData::StatesValue("Cash", "homeQmlView"));
 
-    casapp.setDisplayStatesMap(&map);
-    casapp.setDisplayQml("qml/main.qml");
+	qapp.setDisplayStatesMap(&map);
+	qapp.setDisplayQml("qml/main.qml");
 
-    // on registerHandler() use same name of qml objectName()
-    LoginHandler loginhdlr;
-    casapp.registerHandler("loginQmlView", &loginhdlr);
+	/* on registerHandler() use same name of qml objectName() */
+	qapp.registerHandler("loginQmlView", &loginhdlr);
+	qapp.registerHandler("homeQmlView", &homehdlr);
+	qapp.registerHandler("ticketQmlView", &tickethdlr);
 
-    HomeHandler homehdlr;
-    casapp.registerHandler("homeQmlView", &homehdlr);
+	qapp.setDisplayState(Login);
 
-    TicketHandler tickethdlr;
-    casapp.registerHandler("ticketQmlView", &tickethdlr);
-
-    casapp.setDisplayState(Login);
-    return casapp.exec();
+	return qapp.exec();
 }

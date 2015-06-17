@@ -1,11 +1,10 @@
 #ifndef TICKETHANDLER_H
 #define TICKETHANDLER_H
-#include "CASCoreBusiness/BETicket.h"
 
-#include "casapplication/cashandlerbase.h"
+#include "qmlappvhandlerbase.h"
 
-class TicketHandlerPrivate;
-class TicketHandler : public CASHandlerBase
+struct TicketHandlerPrivate;
+class TicketHandler : public QmlAppvHandlerBase
 {
     Q_OBJECT
 public:
@@ -34,8 +33,7 @@ public slots:
 private:
     TicketHandlerPrivate *d;
     QString codeTicket;
-    QList<Model::BETicket> listInfoTicket;
     std::string codTicketToPrint;
 };
 
-#endif //! TICKETHANDLER_H
+#endif /* TICKETHANDLER_H */

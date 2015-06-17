@@ -1,9 +1,9 @@
 #ifndef LOGINHANDLER_H
 #define LOGINHANDLER_H
 
-#include "casapplication/cashandlerbase.h"
+#include "qmlappvhandlerbase.h"
 
-class LoginHandler : public CASHandlerBase
+class LoginHandler : public QmlAppvHandlerBase
 {
     Q_OBJECT
 public slots:

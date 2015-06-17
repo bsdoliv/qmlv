@@ -1,23 +1,8 @@
-#include "CASCoreBusiness/BEHistoricoOperacao.h"
-#include "CASCoreBusiness/BENovoMovimento.h"
-#include "CASCoreBusiness/beclient.h"
-#include "CASCoreBusiness/cascorebusiness.h"
-#include "CasCoreData/DALTicket.h"
-#include "CasCoreData/daoclient.h"
-#include "CoreCommom/basebind.h"
-#include "CoreCommom/corecommom.h"
-#include "CoreCommom/sqlexception.h"
-#include "CoreFatory/corefatory.h"
-
-using namespace Model;
-using namespace DataAcessLayer;
-
 #include "tickethandler.h"
 #include "casuidata.h"
 
 #include <QPainter>
 #include <QPrinter>
-#include <QSqlError>
 #include <QRegExp>
 #include <QDesktopServices>
 
