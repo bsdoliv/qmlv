@@ -3,8 +3,8 @@ import "widgets"
 
 Rectangle {
     id: loginWindow
-    width: 1680
-    height: 1050
+    width: 1024
+    height: 768
     color: "#270447"
     clip: false
 

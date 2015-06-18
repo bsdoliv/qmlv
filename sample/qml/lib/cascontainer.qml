@@ -3,11 +3,11 @@ import "widgets"
 
 Rectangle {
     id: casContainer
-    width: 1680
-    height: 1050
+    width: 1024
+    height: 768
 
     property real contentHeight: casContainer.height - 210
-    property real contentWidth: 1350
+    property real contentWidth: 1024
     property real menuButtonHeight: 126
     property real menuButtonWidth: 310
     property real contentX: menuButtonWidth

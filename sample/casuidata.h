@@ -2,8 +2,8 @@
 #define CASUI_H
 
 enum States {
-    None     = -1,
-    Login = 1,
+    None	= -1,
+    Login	= 1,
     Home,
     TicketNew,
     TicketKeyboard,

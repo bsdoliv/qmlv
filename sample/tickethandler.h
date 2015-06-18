@@ -3,7 +3,6 @@
 
 #include "qmlappvhandlerbase.h"
 
-struct TicketHandlerPrivate;
 class TicketHandler : public QmlAppvHandlerBase
 {
     Q_OBJECT
@@ -31,7 +30,6 @@ public slots:
     void on_closeBack();
 
 private:
-    TicketHandlerPrivate *d;
     QString codeTicket;
     std::string codTicketToPrint;
 };

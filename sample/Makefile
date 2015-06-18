@@ -15,7 +15,8 @@ QMAKEPRO_OPTS+="MOC_DIR=./.mocs"
 QMAKEPRO_OPTS+="CONFIG += debug"
 QMAKEPRO_OPTS+="INCLUDEPATH += $${PWD}/.."
 QMAKEPRO_OPTS+="QT += gui"
-QMAKEPRO_OPTS+="LIBS += $${PWD}/lib/libqmlv.a"
+QMAKEPRO_OPTS+="QT += declarative"
+QMAKEPRO_OPTS+="LIBS += $${PWD}/../libqmlv.a"
 QMAKEPRO_OPTS+= -t app
 QMAKEPRO_OPTS+= -nopwd
 QMAKEPRO_OPTS+= -norecursive
@@ -57,6 +58,7 @@ clean:
 	-rm -fv ui_*.h
 	-rm -fv lib${TARGET}.so*
 	-rm -fv lib${TARGET}.a
+	-rm -rfv ${TARGET}.app
 
 .PHONY: prunebuild
 prunebuild:
