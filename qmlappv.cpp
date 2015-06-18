@@ -81,78 +81,88 @@ QmlAppv::exec()
 void
 QmlAppv::registerHandler(const QString &view_id, const QObject *_handler)
 {
-    d->controllers.insert(view_id, const_cast<QObject *>(_handler));
+    QObject		*viewo;
+    const QMetaObject	*mo;
+    QString		 sig;
+    QMetaMethod		 method;
+    const char		*slot;
+    bool		 conn;
 
-    QObject *viewo = lookupViewByName(view_id);
+    d->controllers.insert(view_id, const_cast<QObject *>(_handler));
+    viewo = lookupViewByName(view_id);
+    mo = viewo->metaObject();
 
     Q_ASSERT_X(viewo, "view_root_object",
-           QString("object with view_id %1 not found").arg(view_id).toAscii().data());
+	   QString("object with view_id %1 not found")
+	   .arg(view_id).toAscii().data());
 
-    const QMetaObject *mo = viewo->metaObject();
-    DEBUGME() 
-        << "objectName" << viewo->objectName()
-        << "viewid" << view_id;
-    
+    qDebug("%s: object name %s, viewid %s", Q_FUNC_INFO,
+	qPrintable(viewo->objectName()), qPrintable(view_id));
+
     for (int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
-        QMetaMethod method(mo->method(i));
-        if (method.methodType() == QMetaMethod::Signal) {
-            // ugly qt hack
-            QString sig = "2" % QString(method.signature());
+        method = mo->method(i);
+        if (method.methodType() != QMetaMethod::Signal) {
+	    /*
+	     * according to qt code, signals should have a signature with an
+	     * prepending 2
+	     */
+            sig = "2" % QString(method.signature());
 
-            // no parameters signals support
-            const char *slot = (sig.contains("QVariant")) ?
-                SLOT(router(QVariant)) :
+            /* no parameters signals support */
+            slot = (sig.contains("QVariant")) ?  SLOT(router(QVariant)) :
                 SLOT(router());
 
-            DEBUGME() 
-                << "connecting method" << method.signature()
-                << "signal" << sig;
-            bool c = QObject::connect(viewo, sig.toAscii().data(), this, slot);
-            if (c) 
-                DEBUGME() << "**" 
-                    << "connect() sucessful" 
-                    << "from" 
-                    << sig
-                    << "to" 
-                    << slot;
+	    qDebug("%s: connecting method %s, signal %s", Q_FUNC_INFO,
+		   qPrintable(method.signature()), qPrintable(sig));
+
+	    conn = QObject::connect(viewo, sig.toAscii().data(), this, slot);
+
+	    qDebug("%s: connect() %s, from %s, to %s", Q_FUNC_INFO, conn ?
+		"successful" : "failed", qPrintable(sig), slot);
         }
     }
 
-    // encapsulates view
+    /* encapsulates view */
     d->views.insert(view_id, new QmlAppvBase(viewo));
 }
 
 void
 QmlAppv::setDisplayState(int s)
 {
+    QString state;
+
     if (d->current_state == s)
         return;
 
     d->current_state = s;
-    QString state = d->display_states.stateName(s);
-    DEBUGME() << "state" << state;
-    QMetaObject::invokeMethod(const_cast<QObject *>(d->view_root_object), 
-                              "changeState",
-                              Q_ARG(QVariant, state));
+    state = d->display_states.stateName(s);
+    qDebug("%s: state %s", Q_FUNC_INFO, qPrintable(state));
+
+    QMetaObject::invokeMethod(const_cast<QObject *>(d->view_root_object),
+	"changeState", Q_ARG(QVariant, state));
 }
 
 void
-QmlAppv::renderView(const QString &view_id, const QmlAppvData::ViewResponse *resp)
+QmlAppv::renderView(const QString &view_id, const QmlAppvData::ViewResponse
+    *resp)
 {
-    DEBUGME() << "resp" << resp;
-    QObject *o = lookupViewByName(view_id);
-    if (!o) {
-        // XXX converts to log
-        DEBUGME() << "object" << view_id << "not found";
+    QObject	*o;
+    bool	 inv;
+
+    qDebug("%s: response %p", Q_FUNC_INFO, resp);
+
+    if ((o = lookupViewByName(view_id)) == NULL) {
+	qDebug("%s: object %s not found", Q_FUNC_INFO, qPrintable(view_id));
         return;
     }
-    DEBUGME() << "object" << o->objectName();
-    bool r = QMetaObject::invokeMethod(const_cast<QObject *>(o), 
-                              "render",
-                              Q_ARG(QVariant, static_cast<QVariant>(*resp)));
-    if (! r)
-        // XXX converts to log
-        DEBUGME() << "view_id" << view_id << "invokeMethod render()" << r;
+
+    qDebug("%s: object found %s", Q_FUNC_INFO, qPrintable(o->objectName()));
+
+    inv = QMetaObject::invokeMethod(const_cast<QObject *>(o), "render",
+	Q_ARG(QVariant, static_cast<QVariant>(*resp)));
+
+    qDebug("%s: %s invokeMethod('render') %s", Q_FUNC_INFO,
+	qPrintable(view_id), inv ?  "successful" : "failed");
 }
 
 QObject *
@@ -170,20 +180,18 @@ QmlAppv::router()
 void
 QmlAppv::router(QVariant data)
 {
-    // dump first
-    //QmlAppvData::dumpVariant(&data);
+    qDebug("%s: data %s", Q_FUNC_INFO, qPrintable(data.toString()));
     return router(new QmlAppvData::ViewRequest(data));
 }
 
 void
 QmlAppv::router(QmlAppvData::ViewRequest *request)
 {
-#if 0
-    if (data)
-        QmlAppvData::dump(data);
-#endif
-    bool delreq = false;
-    if (! request) {
+    QmlAppvHandlerBase	*o;
+    bool		 delreq = false;
+    
+    /* a request object is always needed for consistency */
+    if (!request) {
         request = new QmlAppvData::ViewRequest;
         delreq = true;
     }
@@ -195,16 +203,17 @@ QmlAppv::router(QmlAppvData::ViewRequest *request)
     int c = signal.indexOf("(");
     signal = signal.left(c);
 
-    QmlAppvHandlerBase *o =
-        reinterpret_cast<QmlAppvHandlerBase *>(d->controllers.value(sender_id));
-    DEBUGME() << "controllers" << d->controllers;
+    qDebug("%s: controllers %p", Q_FUNC_INFO, &d->controllers);
 
-    if (!o) { 
-        DEBUGME() << "could not route given signal" << sender_id;
-        return;
+    if ((o = reinterpret_cast<QmlAppvHandlerBase *>
+	(d->controllers.value(sender_id))) == NULL) {
+	    qDebug("%s: could not route given signal from sender %s",
+		Q_FUNC_INFO, qPrintable(sender_id));
+	    return;
     }
 
-    DEBUGME() << "success looking up to" << sender_id << "routing signal";
+    qDebug("%s: success looking up to %s routing signal", Q_FUNC_INFO,
+	qPrintable(sender_id));
 
     /* 
      * builds slot name prefix_signalName() and invokes it.
@@ -218,26 +227,29 @@ QmlAppv::router(QmlAppvData::ViewRequest *request)
     request->current_state = d->current_state;
     o->setResponse(&response);
     o->setRequest(request);
-    bool inv = QMetaObject::invokeMethod(o, method);
+    bool inv;
+
+    if (!(inv = QMetaObject::invokeMethod(o, method)))
+        qDebug("%s: invokeMethod() %s failed", Q_FUNC_INFO, method);
+
+    /* cleanup request */
     if (delreq)
         delete request;
 
+    /* cleanup object response/request pair */
     o->setResponse(0);
     o->setRequest(0);
 
-    if (! inv) {
-        DEBUGME() << "invokeMethod()" << method << "failed";
-        // log error on routing and drops signal
-        return;
-    }
+    if (!inv)
+	return;
 
-    // change screen state
+    /* change screen state */
     int nstate = response.next_state;
     setDisplayState(nstate);
     response["state"] = d->display_states.stateName(nstate);
 
-    // call render with response
-    DEBUGME() << "response" << response;
+    /* call render with response */
+    qDebug("%s: response %p", Q_FUNC_INFO, &response);
     QString view_id = d->display_states.screenName(nstate);
     renderView(view_id, &response);
 }
