@@ -1,0 +1,4 @@
+- s/DEBUGME/DPRINTF
+- knf
+- simple test app, 3 screens, 3 states
+- s/qmlappv/qmlv
