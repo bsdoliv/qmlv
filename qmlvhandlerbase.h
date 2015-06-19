@@ -25,10 +25,10 @@ class QmlvHandlerBase  : public QObject
 {
 	Q_OBJECT
 public:
-	void setResponse(QmlvData::ViewResponse* r) {
+	void setResponse(QmlvData::Response* r) {
 		respn = r;
 	}
-	void setRequest(QmlvData::ViewRequest* r) {
+	void setRequest(QmlvData::Request* r) {
 		reqst = r;
 	}
 	void setErrMsg(const QString &errmsg) {
@@ -53,11 +53,11 @@ public:
 	}
 
 protected:
-	QmlvData::ViewRequest	*reqst;
-	QmlvData::ViewResponse	*respn;
+	QmlvData::Request	*reqst;
+	QmlvData::Response	*respn;
 
-	const QmlvData::ViewRequest &request() { return *reqst; }
-	QmlvData::ViewResponse *response() { return respn; }
+	const QmlvData::Request &request() { return *reqst; }
+	QmlvData::Response *response() { return respn; }
 };
 
 #endif /* QMLVHANDLERBASE_H */

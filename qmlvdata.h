@@ -24,21 +24,21 @@
 
 namespace QmlvData
 {
-	struct StatesValue
+	struct StatePair
 	{
 		QString state_id;
 		QString screen_id;
-		explicit StatesValue(const QString &_state, const QString
+		explicit StatePair(const QString &_state, const QString
 				     &_screen) :
 			state_id(_state),
 			screen_id(_screen) { }
-		StatesValue() { }
+		StatePair() { }
 	};
 
-	class DisplayStatesMap : public QHash<int, StatesValue>
+	class ViewStateMap : public QHash<int, StatePair>
 	{
 	public:
-		DisplayStatesMap() : QHash<int, StatesValue>() { };
+		ViewStateMap() : QHash<int, StatePair>() { };
 		inline QString screenName(int id) {
 			return value(id).screen_id;
 		}
@@ -49,20 +49,20 @@ namespace QmlvData
 
 	typedef QVariantMap ViewData;
 
-	class ViewRequest : public ViewData
+	class Request : public ViewData
 	{ 
 	public:
-		ViewRequest() : ViewData() { }
-		ViewRequest(const QVariant &d) : ViewData(d.toMap()) { }
+		Request() : ViewData() { }
+		Request(const QVariant &d) : ViewData(d.toMap()) { }
 		int current_state;
 	};
 
-	class ViewResponse : public ViewData { 
+	class Response : public ViewData { 
 	public:
 		int next_state;
 	};
 
-	static inline void dump(const ViewRequest *data) {
+	static inline void dump(const Request *data) {
 		foreach (QString k, data->keys())
 			qDebug("%s: key %s value %s", Q_FUNC_INFO,
 			   qPrintable(k), qPrintable((*data)[k].toString()));
@@ -77,7 +77,7 @@ namespace QmlvData
 	}
 };
 
-Q_DECLARE_METATYPE(QmlvData::ViewRequest);
-Q_DECLARE_METATYPE(QmlvData::ViewResponse);
+Q_DECLARE_METATYPE(QmlvData::Request);
+Q_DECLARE_METATYPE(QmlvData::Response);
 
 #endif /* QMLVDATA_H */

@@ -26,12 +26,10 @@ class QmlvAppBase : public QObject
 {
 	Q_OBJECT
 public:
-	void render(QmlvData::ViewResponse *);
-
-	QmlvAppBase(QObject *);
+		QmlvAppBase(QObject *);
+	void	render(QmlvData::Response *);
 };
 
-struct QmlvAppPrivate;
 class QmlvApp : public QApplication
 { 
 	Q_OBJECT
@@ -41,27 +39,24 @@ public:
 		Maximized,
 		FullScreen
 	};
-	QmlvApp(int, char **);
-	QmlvApp(int, char **, enum showMode);
+		QmlvApp(int, char **);
+		QmlvApp(int, char **, showMode);
 
-	void registerHandler(const QString &, const QObject *);
-	int  exec();
-	void setDisplayQml(const QString &);
-	void setDisplayState(int);
-	void setDisplayStatesMap(const QmlvData::DisplayStatesMap *);
-
-protected:
-	void init(int sm = Normal);
+	void	registerHandler(const QString &, const QObject *);
+	int	exec();
+	void	setQml(const QString &);
+	void	setState(int);
+	void	setStateMap(const QmlvData::ViewStateMap *);
 
 private slots:
-	void router(QmlvData::ViewRequest *);
-	void router(QVariant);
-	void router();
-	void renderView(const QString &, const QmlvData::ViewResponse *);
-	QObject *lookupViewByName(const QString &);
+	void	 router(QmlvData::Request *);
+	void	 router(QVariant);
+	void	 router();
+	void	 renderView(const QString &, const QmlvData::Response *);
+	QObject	*lookupViewByName(const QString &);
 
 private:
-	QmlvAppPrivate *d;
+	struct QmlvAppPrivate *d;
 };
 
 #endif /* QMLVAPP_H */
