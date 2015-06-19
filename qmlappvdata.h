@@ -18,10 +18,9 @@
 #define QMLAPPVDATA_H
 
 #include <QVariant>
+#ifndef QT_NO_DEBUG_OUTPUT
 #include <QDebug>
-
-#define DEBUGME() \
-    qWarning() << Q_FUNC_INFO
+#endif
 
 namespace QmlAppvData
 {
@@ -55,14 +54,17 @@ namespace QmlAppvData
     };
 
     static inline void dump(const ViewRequest *data) {
-        qWarning() << "CASData::dump keys" << data->keys();
-        qWarning() << "CASData::dump values" << data->values();
+	foreach (QString k, data->keys())
+		qDebug("%s: key %s value %s", Q_FUNC_INFO, qPrintable(k),
+		    qPrintable((*data)[k].toString()));
     }
 
     static inline void dumpVariant(const QVariant *data) {
-        QVariantMap rdata = data->toMap();
-        qWarning() << "CASData::dumpVariant keys" << rdata.keys();
-        qWarning() << "CASData::dumpVariant values" << rdata.values();
+	const QVariantMap &rdata = data->toMap();
+
+	foreach (QString k, rdata.keys())
+		qDebug("%s: key %s value %s", Q_FUNC_INFO, qPrintable(k),
+		    qPrintable((rdata)[k].toString()));
     }
 };
 

@@ -14,11 +14,14 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <QDebug>
 #include <QGraphicsObject> /* dynamic_cast from QGraphicsObject to QObject */
 #include <QMetaMethod>
 #include <QStringBuilder>
 #include <QVariant>
+
+#ifndef QT_NO_DEBUG_OUTPUT
+#include <QDebug>
+#endif
 
 #include "qmlappv.h"
 #include "qmlappvhandlerbase.h"
