@@ -10,7 +10,7 @@ HomeHandler::on_logoff()
 
     if (user_id != 0) user_id = 0;
 
-    DEBUGME() << "request['user_id']" << request()["user_id"];
+    qDebug() << "request['user_id']" << request()["user_id"];
 
     param << user_id;
     param << 0; // opcode logoff

@@ -4,12 +4,8 @@
 void
 LoginHandler::on_loginSubmit()
 {
-    DEBUGME() << "req['user']" << request()["user"];
-    DEBUGME() << "req['passwd']" << request()["passwd"];
-
-    QString dbconname(this->metaObject()->className());
-    { 
-    }
+    qDebug() << "req['user']" << request()["user"];
+    qDebug() << "req['passwd']" << request()["passwd"];
 
     QString errmsg;
     bool error = false;
@@ -24,7 +20,7 @@ void
 LoginHandler::on_checkUserLogin()
 {
     // FIXME it should be retrieved from session
-    DEBUGME() << "request['user_id']" << request()["user_id"];
+    qDebug() << "request['user_id']" << request()["user_id"];
 
     QString dbconname(this->metaObject()->className());
 
