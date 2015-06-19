@@ -1,5 +1,0 @@
-CasContainer ./cascontainer.qml
-
-CasTicket ./ticket.qml
-CasHome ./home.qml
-CasLogin ./login.qml
