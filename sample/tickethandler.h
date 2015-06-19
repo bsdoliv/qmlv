@@ -1,9 +1,9 @@
 #ifndef TICKETHANDLER_H
 #define TICKETHANDLER_H
 
-#include "qmlappvhandlerbase.h"
+#include "qmlvhandlerbase.h"
 
-class TicketHandler : public QmlAppvHandlerBase
+class TicketHandler : public QmlvHandlerBase
 {
     Q_OBJECT
 public:

@@ -1,9 +1,9 @@
 #ifndef CONTAINERHANDLER_H
 #define CONTAINERHANDLER_H
 
-#include "qmlappvhandlerbase.h"
+#include "qmlvhandlerbase.h"
 
-class HomeHandler : public QmlAppvHandlerBase
+class HomeHandler : public QmlvHandlerBase
 {
     Q_OBJECT
 public slots:

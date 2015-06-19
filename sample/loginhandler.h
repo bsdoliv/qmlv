@@ -1,9 +1,9 @@
 #ifndef LOGINHANDLER_H
 #define LOGINHANDLER_H
 
-#include "qmlappvhandlerbase.h"
+#include "qmlvhandlerbase.h"
 
-class LoginHandler : public QmlAppvHandlerBase
+class LoginHandler : public QmlvHandlerBase
 {
     Q_OBJECT
 public slots:
