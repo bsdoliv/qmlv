@@ -38,12 +38,12 @@
 **
 ****************************************************************************/
 
-#ifndef QMLAPPVIEWER_H
-#define QMLAPPVIEWER_H
+#ifndef QMLVIEWER_H
+#define QMLVIEWER_H
 
 #include <QtDeclarative/QDeclarativeView>
 
-class QmlAppViewer : public QDeclarativeView
+class QmlViewer : public QDeclarativeView
 {
     Q_OBJECT
 
@@ -54,22 +54,21 @@ public:
         ScreenOrientationAuto
     };
 
-    explicit QmlAppViewer(QWidget *parent = 0);
-    virtual ~QmlAppViewer();
+    explicit QmlViewer(QWidget *p = 0);
+    virtual ~QmlViewer();
 
-    static QmlAppViewer *create();
+    static QmlViewer *create();
 
-    void setMainQmlFile(const QString &file);
-    void addImportPath(const QString &path);
+    void setMainQmlFile(const QString &);
+    void addImportPath(const QString &);
 
-    // Note that this will only have an effect on Symbian and Fremantle.
-    void setOrientation(ScreenOrientation orientation);
+    void setOrientation(ScreenOrientation);
 
-    void showExpanded(int mode);
+    void showExpanded(int);
 
 private:
-    explicit QmlAppViewer(QDeclarativeView *view, QWidget *parent);
-    class QmlAppViewerPrivate *d;
+    explicit QmlViewer(QDeclarativeView *, QWidget *);
+    class QmlViewerPrivate *d;
 };
 
-#endif // QMLAPPVIEWER_H
+#endif /* QMLVIEWER_H */

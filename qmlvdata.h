@@ -14,15 +14,15 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef QMLAPPVDATA_H
-#define QMLAPPVDATA_H
+#ifndef QMLVDATA_H
+#define QMLVDATA_H
 
 #include <QVariant>
 #ifndef QT_NO_DEBUG_OUTPUT
 #include <QDebug>
 #endif
 
-namespace QmlAppvData
+namespace QmlvData
 {
     struct StatesValue {
         QString state_id;
@@ -68,7 +68,7 @@ namespace QmlAppvData
     }
 };
 
-Q_DECLARE_METATYPE(QmlAppvData::ViewRequest);
-Q_DECLARE_METATYPE(QmlAppvData::ViewResponse);
+Q_DECLARE_METATYPE(QmlvData::ViewRequest);
+Q_DECLARE_METATYPE(QmlvData::ViewResponse);
 
-#endif /* QMLAPPVDATA_H */
+#endif /* QMLVDATA_H */

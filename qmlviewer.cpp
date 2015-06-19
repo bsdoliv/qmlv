@@ -54,8 +54,8 @@
 **
 ****************************************************************************/
 
-#include "qmlappviewer.h"
-#include "qmlappv.h"
+#include "qmlviewer.h"
+#include "qmlvapp.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
@@ -95,17 +95,17 @@ static QmlJsDebuggingEnabler enableDebuggingHelper;
 
 #endif // QMLJSDEBUGGER
 
-class QmlAppViewerPrivate
+class QmlViewerPrivate
 {
-    QmlAppViewerPrivate(QDeclarativeView *view_) : view(view_) {}
+    QmlViewerPrivate(QDeclarativeView *view_) : view(view_) {}
 
     QString mainQmlFile;
     QDeclarativeView *view;
-    friend class QmlAppViewer;
+    friend class QmlViewer;
     QString adjustPath(const QString &path);
 };
 
-QString QmlAppViewerPrivate::adjustPath(const QString &path)
+QString QmlViewerPrivate::adjustPath(const QString &path)
 {
 #ifdef Q_OS_MAC
     if (!QDir::isAbsolutePath(path))
@@ -120,9 +120,9 @@ QString QmlAppViewerPrivate::adjustPath(const QString &path)
     return path;
 }
 
-QmlAppViewer::QmlAppViewer(QWidget *parent)
+QmlViewer::QmlViewer(QWidget *parent)
     : QDeclarativeView(parent)
-    , d(new QmlAppViewerPrivate(this))
+    , d(new QmlViewerPrivate(this))
 {
     connect(engine(), SIGNAL(quit()), SLOT(close()));
     setResizeMode(QDeclarativeView::SizeRootObjectToView);
@@ -137,9 +137,9 @@ QmlAppViewer::QmlAppViewer(QWidget *parent)
 #endif
 }
 
-QmlAppViewer::QmlAppViewer(QDeclarativeView *view, QWidget *parent)
+QmlViewer::QmlViewer(QDeclarativeView *view, QWidget *parent)
     : QDeclarativeView(parent)
-    , d(new QmlAppViewerPrivate(view))
+    , d(new QmlViewerPrivate(view))
 {
     connect(view->engine(), SIGNAL(quit()), view, SLOT(close()));
     view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
@@ -154,32 +154,32 @@ QmlAppViewer::QmlAppViewer(QDeclarativeView *view, QWidget *parent)
 #endif
 }
 
-QmlAppViewer::~QmlAppViewer()
+QmlViewer::~QmlViewer()
 {
     delete d;
 }
 
-QmlAppViewer *QmlAppViewer::create()
+QmlViewer *QmlViewer::create()
 {
 #ifdef HARMATTAN_BOOSTER
-    return new QmlAppViewer(MDeclarativeCache::qDeclarativeView(), 0);
+    return new QmlViewer(MDeclarativeCache::qDeclarativeView(), 0);
 #else
-    return new QmlAppViewer();
+    return new QmlViewer();
 #endif
 }
 
-void QmlAppViewer::setMainQmlFile(const QString &file)
+void QmlViewer::setMainQmlFile(const QString &file)
 {
     d->mainQmlFile = d->adjustPath(file);
     d->view->setSource(QUrl::fromLocalFile(d->mainQmlFile));
 }
 
-void QmlAppViewer::addImportPath(const QString &path)
+void QmlViewer::addImportPath(const QString &path)
 {
     d->view->engine()->addImportPath(d->adjustPath(path));
 }
 
-void QmlAppViewer::setOrientation(ScreenOrientation orientation)
+void QmlViewer::setOrientation(ScreenOrientation orientation)
 {
 #if defined(Q_OS_SYMBIAN)
     // If the version of Qt on the device is < 4.7.2, that attribute won't work
@@ -222,16 +222,16 @@ void QmlAppViewer::setOrientation(ScreenOrientation orientation)
     setAttribute(attribute, true);
 }
 
-void QmlAppViewer::showExpanded(int mode)
+void QmlViewer::showExpanded(int mode)
 {
     switch (mode) {
-    case QmlAppv::FullScreen:
+    case QmlvApp::FullScreen:
         d->view->showFullScreen();
         break;
-    case QmlAppv::Maximized:
+    case QmlvApp::Maximized:
         d->view->showMaximized();
         break;
-    case QmlAppv::Normal:
+    case QmlvApp::Normal:
         d->view->show();
         break;
     }

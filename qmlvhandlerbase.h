@@ -14,21 +14,21 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef CASHANDLERBASE_H
-#define CASHANDLERBASE_H
+#ifndef QMLVHANDLERBASE_H
+#define QMLVHANDLERBASE_H
 
 #include <QObject>
 
-#include "qmlappvdata.h"
+#include "qmlvdata.h"
 
-class QmlAppvHandlerBase  : public QObject
+class QmlvHandlerBase  : public QObject
 {
     Q_OBJECT
 public:
-    void setResponse(QmlAppvData::ViewResponse* r) {
+    void setResponse(QmlvData::ViewResponse* r) {
         respn = r;
     }
-    void setRequest(QmlAppvData::ViewRequest* r) {
+    void setRequest(QmlvData::ViewRequest* r) {
         reqst = r;
     }
     void setErrMsg(const QString &errmsg) {
@@ -53,11 +53,11 @@ public:
     }
 
 protected:
-    QmlAppvData::ViewRequest    *reqst;
-    QmlAppvData::ViewResponse   *respn;
+    QmlvData::ViewRequest    *reqst;
+    QmlvData::ViewResponse   *respn;
 
-    const QmlAppvData::ViewRequest &request() { return *reqst; }
-    QmlAppvData::ViewResponse *response() { return respn; }
+    const QmlvData::ViewRequest &request() { return *reqst; }
+    QmlvData::ViewResponse *response() { return respn; }
 };
 
-#endif //! CASHANDLERBASE_H
+#endif /* QMLVHANDLERBASE_H */

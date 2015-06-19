@@ -14,15 +14,25 @@
  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef QMLAPPV_H
-#define QMLAPPV_H
+#ifndef QMLVAPP_H
+#define QMLVAPP_H
 
 #include <QApplication>
 
-#include "qmlappvdata.h"
+#include "qmlvapp.h"
+#include "qmlvdata.h"
 
-struct QmlAppvPrivate;
-class QmlAppv : public QApplication
+class QmlvAppBase : public QObject
+{
+    Q_OBJECT
+public:
+    void render(QmlvData::ViewResponse *);
+
+    QmlvAppBase(QObject *);
+};
+
+struct QmlvAppPrivate;
+class QmlvApp : public QApplication
 { 
     Q_OBJECT
 public:
@@ -31,27 +41,27 @@ public:
         Maximized,
         FullScreen
     };
-    QmlAppv(int argc, char **argv);
-    QmlAppv(int argc, char **argv, enum showMode sm);
+    QmlvApp(int, char **);
+    QmlvApp(int, char **, enum showMode);
 
-    void registerHandler(const QString &s, const QObject *dst);
+    void registerHandler(const QString &, const QObject *);
     int  exec();
-    void setDisplayQml(const QString &p);
-    void setDisplayState(int s);
-    void setDisplayStatesMap(const QmlAppvData::DisplayStatesMap *m);
+    void setDisplayQml(const QString &);
+    void setDisplayState(int);
+    void setDisplayStatesMap(const QmlvData::DisplayStatesMap *);
 
 protected:
     void init(int sm = Normal);
 
 private slots:
-    void router(QmlAppvData::ViewRequest *);
+    void router(QmlvData::ViewRequest *);
     void router(QVariant);
     void router();
-    void renderView(const QString &, const QmlAppvData::ViewResponse *);
+    void renderView(const QString &, const QmlvData::ViewResponse *);
     QObject *lookupViewByName(const QString &);
 
 private:
-    QmlAppvPrivate *d;       
+    QmlvAppPrivate *d;       
 };
 
-#endif /* QMLAPPV_H */
+#endif /* QMLVAPP_H */

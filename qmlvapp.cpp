@@ -23,52 +23,51 @@
 #include <QDebug>
 #endif
 
-#include "qmlappv.h"
-#include "qmlappvhandlerbase.h"
-#include "qmlappvbase.h"
-#include "qmlappviewer.h"
+#include "qmlvapp.h"
+#include "qmlvhandlerbase.h"
+#include "qmlviewer.h"
 
-struct QmlAppvPrivate 
+struct QmlvAppPrivate 
 {
-    typedef QHash<QString, const QmlAppvBase *> ViewsMap;
+    typedef QHash<QString, const QmlvAppBase *> ViewsMap;
     typedef QHash<QString, QObject *> ControllersMap;
 
-    QmlAppViewer display;
+    QmlViewer display;
     int current_state;
     QObject *view_root_object;
     ViewsMap views;
     ControllersMap controllers;
-    QmlAppvData::DisplayStatesMap display_states;
+    QmlvData::DisplayStatesMap display_states;
     int show_mode;
 };
 
 void
-QmlAppv::init(int sm)
+QmlvApp::init(int sm)
 {
     d->current_state = -1;
     d->show_mode = sm;
 }
 
-QmlAppv::QmlAppv(int argc, char **argv, enum showMode sm) :
+QmlvApp::QmlvApp(int argc, char **argv, enum showMode sm) :
     QApplication(argc, argv),
-    d(new QmlAppvPrivate)
+    d(new QmlvAppPrivate)
 {
     init(sm);
 }
 
-QmlAppv::QmlAppv(int argc, char **argv) : 
+QmlvApp::QmlvApp(int argc, char **argv) : 
     QApplication(argc, argv),
-    d(new QmlAppvPrivate)
+    d(new QmlvAppPrivate)
 { 
     init();
 }
 
 void
-QmlAppv::setDisplayQml(const QString &path)
+QmlvApp::setDisplayQml(const QString &path)
 {
     QApplication::setApplicationName(qApp->argv()[0]);
 
-    d->display.setOrientation(QmlAppViewer::ScreenOrientationAuto);
+    d->display.setOrientation(QmlViewer::ScreenOrientationAuto);
     d->display.setMainQmlFile(path);
     d->display.showExpanded(d->show_mode);
 
@@ -76,13 +75,13 @@ QmlAppv::setDisplayQml(const QString &path)
 }
 
 int
-QmlAppv::exec()
+QmlvApp::exec()
 {
     return QApplication::exec();
 }
 
 void
-QmlAppv::registerHandler(const QString &view_id, const QObject *_handler)
+QmlvApp::registerHandler(const QString &view_id, const QObject *_handler)
 {
     QObject		*viewo;
     const QMetaObject	*mo;
@@ -124,11 +123,11 @@ QmlAppv::registerHandler(const QString &view_id, const QObject *_handler)
     }
 
     /* encapsulates view */
-    d->views.insert(view_id, new QmlAppvBase(viewo));
+    d->views.insert(view_id, new QmlvAppBase(viewo));
 }
 
 void
-QmlAppv::setDisplayState(int s)
+QmlvApp::setDisplayState(int s)
 {
     QString state;
 
@@ -145,7 +144,7 @@ QmlAppv::setDisplayState(int s)
 }
 
 void
-QmlAppv::renderView(const QString &view_id, const QmlAppvData::ViewResponse
+QmlvApp::renderView(const QString &view_id, const QmlvData::ViewResponse
     *resp)
 {
     QObject	*o;
@@ -168,35 +167,35 @@ QmlAppv::renderView(const QString &view_id, const QmlAppvData::ViewResponse
 }
 
 QObject *
-QmlAppv::lookupViewByName(const QString &view_id)
+QmlvApp::lookupViewByName(const QString &view_id)
 {
     return d->view_root_object->findChild<QObject *>(view_id);
 }
 
 void
-QmlAppv::router()
+QmlvApp::router()
 {
     qDebug("%s", Q_FUNC_INFO);
-    return router(static_cast<QmlAppvData::ViewRequest *>(0));
+    return router(static_cast<QmlvData::ViewRequest *>(0));
 }
 
 void
-QmlAppv::router(QVariant data)
+QmlvApp::router(QVariant data)
 {
     qDebug("%s: data %s", Q_FUNC_INFO, data.toString().isEmpty() ? "\"none\"" :
 	qPrintable(data.toString()));
-    return router(new QmlAppvData::ViewRequest(data));
+    return router(new QmlvData::ViewRequest(data));
 }
 
 void
-QmlAppv::router(QmlAppvData::ViewRequest *request)
+QmlvApp::router(QmlvData::ViewRequest *request)
 {
-    QmlAppvHandlerBase	*o;
+    QmlvHandlerBase	*o;
     bool		 delreq = false;
     
     /* a request object is always needed for consistency */
     if (!request) {
-        request = new QmlAppvData::ViewRequest;
+        request = new QmlvData::ViewRequest;
         delreq = true;
     }
 
@@ -209,7 +208,7 @@ QmlAppv::router(QmlAppvData::ViewRequest *request)
 
     qDebug("%s: controllers %p", Q_FUNC_INFO, &d->controllers);
 
-    if ((o = reinterpret_cast<QmlAppvHandlerBase *>
+    if ((o = reinterpret_cast<QmlvHandlerBase *>
 	(d->controllers.value(sender_id))) == NULL) {
 	    qDebug("%s: could not route given signal from sender %s",
 		Q_FUNC_INFO, qPrintable(sender_id));
@@ -227,7 +226,7 @@ QmlAppv::router(QmlAppvData::ViewRequest *request)
      *      signalName: "loginSubmit"
      */
     const char *method = QString("on_%1").arg(signal).toAscii().constData();
-    QmlAppvData::ViewResponse response;
+    QmlvData::ViewResponse response;
     request->current_state = d->current_state;
     o->setResponse(&response);
     o->setRequest(request);
@@ -259,7 +258,13 @@ QmlAppv::router(QmlAppvData::ViewRequest *request)
 }
 
 void
-QmlAppv::setDisplayStatesMap(const QmlAppvData::DisplayStatesMap *m)
+QmlvApp::setDisplayStatesMap(const QmlvData::DisplayStatesMap *m)
 {
     d->display_states = *m;
+}
+
+QmlvAppBase::QmlvAppBase(QObject *o) :
+    QObject(o)
+{
+    setObjectName(o->objectName());
 }
