@@ -96,30 +96,28 @@ QmlAppv::registerHandler(const QString &view_id, const QObject *_handler)
 	   QString("object with view_id %1 not found")
 	   .arg(view_id).toAscii().data());
 
-    qDebug("%s: object name %s, viewid %s", Q_FUNC_INFO,
-	qPrintable(viewo->objectName()), qPrintable(view_id));
+    qDebug("%s: object name '%s'", Q_FUNC_INFO,
+	qPrintable(viewo->objectName()));
 
     for (int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
         method = mo->method(i);
-        if (method.methodType() != QMetaMethod::Signal) {
-	    /*
-	     * according to qt code, signals should have a signature with an
-	     * prepending 2
-	     */
-            sig = "2" % QString(method.signature());
+        if (method.methodType() != QMetaMethod::Signal)
+		continue;
+	/*
+	 * according to qt code, signals should have a signature with an
+	 * prepending 2
+	 */
+	sig = "2" % QString(method.signature());
 
-            /* no parameters signals support */
-            slot = (sig.contains("QVariant")) ?  SLOT(router(QVariant)) :
-                SLOT(router());
+	/* no parameters signals support */
+	slot = (sig.contains("QVariant")) ?  SLOT(router(QVariant)) :
+	SLOT(router());
 
-	    qDebug("%s: connecting method %s, signal %s", Q_FUNC_INFO,
-		   qPrintable(method.signature()), qPrintable(sig));
+	conn = QObject::connect(viewo, sig.toAscii().data(), this, slot);
 
-	    conn = QObject::connect(viewo, sig.toAscii().data(), this, slot);
-
-	    qDebug("%s: connect() %s, from %s, to %s", Q_FUNC_INFO, conn ?
-		"successful" : "failed", qPrintable(sig), slot);
-        }
+	qDebug("%s: viewid '%s', connect %s from '%s'(%s method) to '%s'",
+	    Q_FUNC_INFO, qPrintable(view_id), conn ?  "successful" : "failed",
+	    qPrintable(sig), qPrintable(method.signature()), slot);
     }
 
     /* encapsulates view */
@@ -136,7 +134,8 @@ QmlAppv::setDisplayState(int s)
 
     d->current_state = s;
     state = d->display_states.stateName(s);
-    qDebug("%s: state %s", Q_FUNC_INFO, qPrintable(state));
+    qDebug("%s: state %s", Q_FUNC_INFO, state.isEmpty() ? "\"none\"" :
+	qPrintable(state));
 
     QMetaObject::invokeMethod(const_cast<QObject *>(d->view_root_object),
 	"changeState", Q_ARG(QVariant, state));
@@ -174,13 +173,15 @@ QmlAppv::lookupViewByName(const QString &view_id)
 void
 QmlAppv::router()
 {
+    qDebug("%s", Q_FUNC_INFO);
     return router(static_cast<QmlAppvData::ViewRequest *>(0));
 }
 
 void
 QmlAppv::router(QVariant data)
 {
-    qDebug("%s: data %s", Q_FUNC_INFO, qPrintable(data.toString()));
+    qDebug("%s: data %s", Q_FUNC_INFO, data.toString().isEmpty() ? "\"none\"" :
+	qPrintable(data.toString()));
     return router(new QmlAppvData::ViewRequest(data));
 }
 
@@ -212,7 +213,7 @@ QmlAppv::router(QmlAppvData::ViewRequest *request)
 	    return;
     }
 
-    qDebug("%s: success looking up to %s routing signal", Q_FUNC_INFO,
+    qDebug("%s: routing signal lookup sender '%s': success", Q_FUNC_INFO,
 	qPrintable(sender_id));
 
     /* 
