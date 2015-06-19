@@ -1,4 +1,6 @@
-- s/DEBUGME/DPRINTF
+done - s/DEBUGME/DPRINTF
 - knf
 - simple test app, 3 screens, 3 states
 - s/qmlappv/qmlv
+
+https://twitter.com/zeecrowddev/status/611116424619233280
