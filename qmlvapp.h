@@ -24,44 +24,44 @@
 
 class QmlvAppBase : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    void render(QmlvData::ViewResponse *);
+	void render(QmlvData::ViewResponse *);
 
-    QmlvAppBase(QObject *);
+	QmlvAppBase(QObject *);
 };
 
 struct QmlvAppPrivate;
 class QmlvApp : public QApplication
 { 
-    Q_OBJECT
+	Q_OBJECT
 public:
-    enum showMode {
-        Normal,
-        Maximized,
-        FullScreen
-    };
-    QmlvApp(int, char **);
-    QmlvApp(int, char **, enum showMode);
+	enum showMode {
+		Normal,
+		Maximized,
+		FullScreen
+	};
+	QmlvApp(int, char **);
+	QmlvApp(int, char **, enum showMode);
 
-    void registerHandler(const QString &, const QObject *);
-    int  exec();
-    void setDisplayQml(const QString &);
-    void setDisplayState(int);
-    void setDisplayStatesMap(const QmlvData::DisplayStatesMap *);
+	void registerHandler(const QString &, const QObject *);
+	int  exec();
+	void setDisplayQml(const QString &);
+	void setDisplayState(int);
+	void setDisplayStatesMap(const QmlvData::DisplayStatesMap *);
 
 protected:
-    void init(int sm = Normal);
+	void init(int sm = Normal);
 
 private slots:
-    void router(QmlvData::ViewRequest *);
-    void router(QVariant);
-    void router();
-    void renderView(const QString &, const QmlvData::ViewResponse *);
-    QObject *lookupViewByName(const QString &);
+	void router(QmlvData::ViewRequest *);
+	void router(QVariant);
+	void router();
+	void renderView(const QString &, const QmlvData::ViewResponse *);
+	QObject *lookupViewByName(const QString &);
 
 private:
-    QmlvAppPrivate *d;       
+	QmlvAppPrivate *d;
 };
 
 #endif /* QMLVAPP_H */

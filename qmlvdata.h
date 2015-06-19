@@ -24,48 +24,57 @@
 
 namespace QmlvData
 {
-    struct StatesValue {
-        QString state_id;
-        QString screen_id;
-        explicit StatesValue(const QString &_state, const QString &_screen) :
-            state_id(_state),
-            screen_id(_screen) { }
-        StatesValue() { }
-    };
+	struct StatesValue
+	{
+		QString state_id;
+		QString screen_id;
+		explicit StatesValue(const QString &_state, const QString
+				     &_screen) :
+			state_id(_state),
+			screen_id(_screen) { }
+		StatesValue() { }
+	};
 
-    class DisplayStatesMap : public QHash<int, StatesValue> {
-    public:
-        DisplayStatesMap() : QHash<int, StatesValue>() { };
-        inline QString screenName(int id) { return value(id).screen_id; };
-        inline QString stateName(int id) { return value(id).state_id; };
-    };
+	class DisplayStatesMap : public QHash<int, StatesValue>
+	{
+	public:
+		DisplayStatesMap() : QHash<int, StatesValue>() { };
+		inline QString screenName(int id) {
+			return value(id).screen_id;
+		}
+		inline QString stateName(int id) {
+			return value(id).state_id; 
+		}
+	};
 
-    typedef QVariantMap ViewData;
-    class ViewRequest : public ViewData { 
-    public:
-        ViewRequest() : ViewData() { }
-        ViewRequest(const QVariant &d) : ViewData(d.toMap()) { }
-            //static_cast<QVariantMap>(*this) = d.toMap();
-        int current_state;
-    };
-    class ViewResponse : public ViewData { 
-    public:
-        int next_state;
-    };
+	typedef QVariantMap ViewData;
 
-    static inline void dump(const ViewRequest *data) {
-	foreach (QString k, data->keys())
-		qDebug("%s: key %s value %s", Q_FUNC_INFO, qPrintable(k),
-		    qPrintable((*data)[k].toString()));
-    }
+	class ViewRequest : public ViewData
+	{ 
+	public:
+		ViewRequest() : ViewData() { }
+		ViewRequest(const QVariant &d) : ViewData(d.toMap()) { }
+		int current_state;
+	};
 
-    static inline void dumpVariant(const QVariant *data) {
-	const QVariantMap &rdata = data->toMap();
+	class ViewResponse : public ViewData { 
+	public:
+		int next_state;
+	};
 
-	foreach (QString k, rdata.keys())
-		qDebug("%s: key %s value %s", Q_FUNC_INFO, qPrintable(k),
-		    qPrintable((rdata)[k].toString()));
-    }
+	static inline void dump(const ViewRequest *data) {
+		foreach (QString k, data->keys())
+			qDebug("%s: key %s value %s", Q_FUNC_INFO,
+			   qPrintable(k), qPrintable((*data)[k].toString()));
+	}
+
+	static inline void dumpVariant(const QVariant *data) {
+		const QVariantMap &rdata = data->toMap(); 
+
+		foreach (QString k, rdata.keys())
+			qDebug("%s: key %s value %s", Q_FUNC_INFO,
+			    qPrintable(k), qPrintable((rdata)[k].toString()));
+	}
 };
 
 Q_DECLARE_METATYPE(QmlvData::ViewRequest);

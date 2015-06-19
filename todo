@@ -1,6 +1,7 @@
 done - s/DEBUGME/DPRINTF
-- knf
+done - knf
 - simple test app, 3 screens, 3 states
-- s/qmlappv/qmlv
+done - s/qmlappv/qmlv
+- second knf (variables names, some refactor etc)
 
 https://twitter.com/zeecrowddev/status/611116424619233280
