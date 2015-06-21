@@ -2,7 +2,7 @@
 export QTDIR?=/opt/qt486
 QMAKE=${QTDIR}/bin/qmake
 
-TARGET=qmlv
+TARGET=sample
 VERSION=0.1
 
 QMAKEFILE=${TARGET}.makefile
