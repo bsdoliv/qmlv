@@ -31,25 +31,25 @@ public:
 	void setRequest(QmlvData::Request* r) {
 		reqst = r;
 	}
-	void setErrMsg(const QString &errmsg) {
-		response()->insert("error_msg", errmsg);
+	void setErrMsg(const QString &msg) {
+		response()->insert("errmsg", msg);
 	}
 	void setErrCod(int errcode) {
-		response()->insert("error_cod", errcode);
+		response()->insert("errno", errcode);
 	}
-	inline void onError(int errcode, const QString &errmsg) {
-		setErrCod(errcode);
-		setErrMsg(errmsg);
+	inline void onError(int code, const QString &msg) {
+		setErrCod(code);
+		setErrMsg(msg);
 	}
-	inline void onError(const QString &errmsg) {
-		if ((*response())["error_cod"].toInt() == 0)
-			(*response())["error_cod"] = 1;
+	inline void onError(const QString &msg) {
+		if ((*response())["errno"].toInt() == 0)
+			(*response())["errno"] = 1;
 
-		setErrMsg(errmsg);
+		setErrMsg(msg);
 	}
-	inline void onSuccess(const QString &errmsg) {
-		(*response())["error_cod"] = 0;
-		setErrMsg(errmsg);
+	inline void onSuccess(const QString &msg) {
+		(*response())["errno"] = 0;
+		setErrMsg(msg);
 	}
 
 protected:
