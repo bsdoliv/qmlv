@@ -67,6 +67,8 @@ QmlvApp::setQml(const QString &path)
 	d->viewer.showExpanded(d->mode);
 
 	d->view_root_object = dynamic_cast<QObject *>(d->viewer.rootObject());
+
+	Q_ASSERT_X(d->view_root_object, Q_FUNC_INFO, "view_root_object NULL");
 }
 
 int
