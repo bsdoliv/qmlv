@@ -89,10 +89,10 @@ QmlvApp::registerHandler(const QString &view_id, const QObject *_handler)
 
 	d->ctls.insert(view_id, const_cast<QObject *>(_handler));
 	viewo = lookupViewByName(view_id);
-	mo = viewo->metaObject();
-
-	Q_ASSERT_X(viewo, "view_root_object", QString("object with view_id %1 "
+	Q_ASSERT_X(viewo, Q_FUNC_INFO, QString("object with view_id %1 "
 	    "not found").arg(view_id).toAscii().data());
+
+	mo = viewo->metaObject();
 
 	qDebug("%s: object name '%s'", Q_FUNC_INFO,
 	    qPrintable(viewo->objectName()));
