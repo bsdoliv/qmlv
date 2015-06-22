@@ -78,7 +78,7 @@ QmlvApp::exec()
 }
 
 void
-QmlvApp::registerHandler(const QString &view_id, const QObject *_handler)
+QmlvApp::registerHandler(const QString &vid, const QObject *_handler)
 {
 	QObject			*viewo;
 	const QMetaObject	*mo;
@@ -87,10 +87,10 @@ QmlvApp::registerHandler(const QString &view_id, const QObject *_handler)
 	const char		*slot;
 	bool			 conn;
 
-	d->ctls.insert(view_id, const_cast<QObject *>(_handler));
-	viewo = lookupViewByName(view_id);
-	Q_ASSERT_X(viewo, Q_FUNC_INFO, QString("object with view_id %1 "
-	    "not found").arg(view_id).toAscii().data());
+	d->ctls.insert(vid, const_cast<QObject *>(_handler));
+	viewo = lookupViewByName(vid);
+	Q_ASSERT_X(viewo, Q_FUNC_INFO, QString("object with view id %1 "
+	    "not found").arg(vid).toAscii().data());
 
 	mo = viewo->metaObject();
 
@@ -114,14 +114,14 @@ QmlvApp::registerHandler(const QString &view_id, const QObject *_handler)
 		conn = QObject::connect(viewo, sig.toAscii().data(), this,
 		    slot);
 
-		qDebug("%s: viewid '%s', connect %s from '%s'(%s method) to "
-		       "'%s'", Q_FUNC_INFO, qPrintable(view_id), conn ?
+		qDebug("%s: view id '%s', connect %s from '%s'(%s method) to "
+		       "'%s'", Q_FUNC_INFO, qPrintable(vid), conn ?
 		       "successful" : "failed", qPrintable(sig),
 		       qPrintable(method.signature()), slot);
 	}
 
 	/* encapsulates view */
-	d->qmls.insert(view_id, new QmlvAppBase(viewo));
+	d->qmls.insert(vid, new QmlvAppBase(viewo));
 }
 
 void
@@ -143,16 +143,16 @@ QmlvApp::setState(int s)
 }
 
 void
-QmlvApp::renderView(const QString &view_id, const QmlvData::Response *resp)
+QmlvApp::renderView(const QString &vid, const QmlvData::Response *resp)
 {
 	QObject	*o;
 	bool	 inv;
 
 	qDebug("%s: response %p", Q_FUNC_INFO, resp);
 
-	if ((o = lookupViewByName(view_id)) == NULL) {
-		qDebug("%s: object %s not found", Q_FUNC_INFO,
-		    qPrintable(view_id));
+	if ((o = lookupViewByName(vid)) == NULL) {
+		qDebug("%s: object (view id) %s not found", Q_FUNC_INFO,
+		    qPrintable(vid));
 		return;
 	}
 
@@ -163,13 +163,13 @@ QmlvApp::renderView(const QString &view_id, const QmlvData::Response *resp)
 	    Q_ARG(QVariant, static_cast<QVariant>(*resp)));
 
 	qDebug("%s: %s invokeMethod('render') %s", Q_FUNC_INFO,
-	    qPrintable(view_id), inv ?  "successful" : "failed");
+	    qPrintable(vid), inv ?  "successful" : "failed");
 }
 
 QObject *
-QmlvApp::lookupViewByName(const QString &view_id)
+QmlvApp::lookupViewByName(const QString &vid)
 {
-	return d->view_root_object->findChild<QObject *>(view_id);
+	return d->view_root_object->findChild<QObject *>(vid);
 }
 
 void
