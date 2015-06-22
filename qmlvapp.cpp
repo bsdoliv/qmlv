@@ -33,7 +33,7 @@ struct QmlvAppPrivate
 	typedef QHash<QString, QObject *>		ControlMap;
 
 	QmlViewer	 viewer;
-	int		 current_state;
+	int		 state;
 	QObject		*view_root_object;
 	QmlMap		 qmls;
 	ControlMap	 ctls;
@@ -46,14 +46,14 @@ QmlvApp::QmlvApp(int argc, char **argv, enum showMode sm) :
     QApplication(argc, argv),
     d(new QmlvAppPrivate)
 {
-	d->current_state = -1;
+	d->state = -1;
 	d->mode = sm;
 }
 
 QmlvApp::QmlvApp(int argc, char **argv) : QApplication(argc, argv),
     d(new QmlvAppPrivate)
 { 
-	d->current_state = -1;
+	d->state = -1;
 	d->mode = Normal;
 }
 
@@ -129,10 +129,10 @@ QmlvApp::setState(int s)
 {
 	QString state;
 
-	if (d->current_state == s)
+	if (d->state == s)
 		return;
 
-	d->current_state = s;
+	d->state = s;
 	state = d->statemap.stateName(s);
 
 	qDebug("%s: state %s", Q_FUNC_INFO, state.isEmpty() ? "\"none\"" :
@@ -231,7 +231,7 @@ QmlvApp::router(QmlvData::Request *request)
 	 *	  signalName: "loginSubmit"
 	 */
 	method = QString("on_" % signal).toAscii().data();
-	request->current_state = d->current_state;
+	request->state = d->state;
 	o->setResponse(&response);
 	o->setRequest(request);
 

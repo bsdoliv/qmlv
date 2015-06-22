@@ -54,7 +54,7 @@ namespace QmlvData
 	public:
 		Request() : ViewData() { }
 		Request(const QVariant &d) : ViewData(d.toMap()) { }
-		int current_state;
+		int state;
 	};
 
 	class Response : public ViewData { 
