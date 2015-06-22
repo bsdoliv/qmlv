@@ -34,7 +34,7 @@ struct QmlvAppPrivate
 
 	QmlViewer	 viewer;
 	int		 state;
-	QObject		*view_root_object;
+	QObject		*vroot;
 	QmlMap		 qmls;
 	ControlMap	 ctls;
 	QmlvData::ViewStateMap
@@ -66,9 +66,9 @@ QmlvApp::setQml(const QString &path)
 	d->viewer.setMainQmlFile(path);
 	d->viewer.showExpanded(d->mode);
 
-	d->view_root_object = dynamic_cast<QObject *>(d->viewer.rootObject());
+	d->vroot = dynamic_cast<QObject *>(d->viewer.rootObject());
 
-	Q_ASSERT_X(d->view_root_object, Q_FUNC_INFO, "view_root_object NULL");
+	Q_ASSERT_X(d->vroot, Q_FUNC_INFO, "view root object NULL");
 }
 
 int
@@ -138,7 +138,7 @@ QmlvApp::setState(int s)
 	qDebug("%s: state %s", Q_FUNC_INFO, state.isEmpty() ? "\"none\"" :
 	    qPrintable(state));
 
-	QMetaObject::invokeMethod(const_cast<QObject *>(d->view_root_object),
+	QMetaObject::invokeMethod(const_cast<QObject *>(d->vroot),
 	    "changeState", Q_ARG(QVariant, state));
 }
 
@@ -169,7 +169,7 @@ QmlvApp::renderView(const QString &vid, const QmlvData::Response *resp)
 QObject *
 QmlvApp::lookupViewByName(const QString &vid)
 {
-	return d->view_root_object->findChild<QObject *>(vid);
+	return d->vroot->findChild<QObject *>(vid);
 }
 
 void
