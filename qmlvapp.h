@@ -20,15 +20,7 @@
 #include <QApplication>
 
 #include "qmlvapp.h"
-#include "qmlvdata.h"
-
-class QmlvAppBase : public QObject
-{
-	Q_OBJECT
-public:
-		QmlvAppBase(QObject *);
-	void	render(QmlvData::Response *);
-};
+#include "qmlvhandlerbase.h"
 
 class QmlvApp : public QApplication
 { 

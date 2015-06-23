@@ -24,22 +24,28 @@
 #endif
 
 #include "qmlvapp.h"
-#include "qmlvhandlerbase.h"
-#include "qmlviewer.h"
+#include "qmlviewer_p.h"
+
+class QmlvAppBase : public QObject
+{
+	Q_OBJECT
+public:
+		QmlvAppBase(QObject *);
+	void	render(QmlvData::Response *);
+};
 
 struct QmlvAppPrivate 
 {
 	typedef QHash<QString, const QmlvAppBase *>	QmlMap;
 	typedef QHash<QString, QObject *>		ControlMap;
 
-	QmlViewer	 viewer;
-	int		 state;
-	QObject		*vroot;
-	QmlMap		 qmls;
-	ControlMap	 ctls;
-	QmlvData::ViewStateMap
-			 statemap;
-	int		 mode;
+	QmlViewer		 viewer;
+	int			 state;
+	QObject			*vroot;
+	QmlMap			 qmls;
+	ControlMap		 ctls;
+	QmlvData::ViewStateMap	 statemap;
+	int			 mode;
 };
 
 QmlvApp::QmlvApp(int argc, char **argv, enum showMode sm) :
@@ -190,14 +196,13 @@ QmlvApp::router(QVariant data)
 void
 QmlvApp::router(QmlvData::Request *request)
 {
-	QmlvHandlerBase	*o;
-	bool		 delreq = false;
-	const char	*method;
-	QmlvData::Response
-			 response;
-	bool		 inv;
-	int		 nstate;
-	QString		 viewid;
+	QmlvHandlerBase		*o;
+	bool			 delreq = false;
+	const char		*method;
+	QmlvData::Response	 response;
+	bool			 inv;
+	int			 nstate;
+	QString			 viewid;
 
 	/* a request object is always needed for consistency */
 	if (!request) {
@@ -255,7 +260,6 @@ QmlvApp::router(QmlvData::Request *request)
 	response["state"] = d->statemap.stateName(nstate);
 
 	/* call render with response */
-	qDebug("%s: response %p", Q_FUNC_INFO, &response);
 	viewid = d->statemap.screenName(nstate);
 	renderView(viewid, &response);
 }

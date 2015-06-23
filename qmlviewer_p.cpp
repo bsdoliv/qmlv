@@ -54,7 +54,7 @@
 **
 ****************************************************************************/
 
-#include "qmlviewer.h"
+#include "qmlviewer_p.h"
 #include "qmlvapp.h"
 
 #include <QtCore/QDir>

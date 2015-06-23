@@ -18,8 +18,70 @@
 #define QMLVHANDLERBASE_H
 
 #include <QObject>
+#include <QVariant>
 
-#include "qmlvdata.h"
+#ifndef QT_NO_DEBUG_OUTPUT
+#include <QDebug>
+#endif
+
+namespace QmlvData
+{
+	struct StatePair
+	{
+		QString state_id;
+		QString screen_id;
+		explicit StatePair(const QString &_state, const QString
+				     &_screen) :
+			state_id(_state),
+			screen_id(_screen) { }
+		StatePair() { }
+	};
+
+	class ViewStateMap : public QHash<int, StatePair>
+	{
+	public:
+		ViewStateMap() : QHash<int, StatePair>() { };
+		inline QString screenName(int id) {
+			return value(id).screen_id;
+		}
+		inline QString stateName(int id) {
+			return value(id).state_id;
+		}
+	};
+
+	typedef QVariantMap ViewData;
+
+	class Request : public ViewData
+	{
+	public:
+		Request() : ViewData() { }
+		Request(const QVariant &d) : ViewData(d.toMap()) { }
+		int state;
+	};
+
+	class Response : public ViewData {
+	public:
+		int next_state;
+	};
+
+	static inline void dump(const Request *data) {
+		foreach (QString k, data->keys())
+			qDebug("%s: key %s value %s", Q_FUNC_INFO,
+			   qPrintable(k), qPrintable((*data)[k].toString()));
+	}
+
+	static inline void dumpVariant(const QVariant *data) {
+		const QVariantMap &rdata = data->toMap();
+
+		foreach (QString k, rdata.keys())
+			qDebug("%s: key %s value %s", Q_FUNC_INFO,
+			    qPrintable(k), qPrintable((rdata)[k].toString()));
+	}
+};
+
+Q_DECLARE_METATYPE(QmlvData::Request);
+Q_DECLARE_METATYPE(QmlvData::Response);
+
 
 class QmlvHandlerBase  : public QObject
 {
