@@ -1,0 +1,5 @@
+LoginQml	./login.qml
+HomeQml		./home.qml
+FinishQml	./finish.qml
+Button		./widgets/button.qml
+InputBox	./widgets/inputbox.qml
