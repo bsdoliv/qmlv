@@ -49,17 +49,15 @@ namespace QmlvData
 		}
 	};
 
-	typedef QVariantMap ViewData;
-
-	class Request : public ViewData
+	class Request : public QVariantMap
 	{
 	public:
-		Request() : ViewData() { }
-		Request(const QVariant &d) : ViewData(d.toMap()) { }
+		Request() : QVariantMap() { }
+		Request(const QVariant &d) : QVariantMap(d.toMap()) { }
 		int state;
 	};
 
-	class Response : public ViewData {
+	class Response : public QVariantMap {
 	public:
 		int next_state;
 	};
