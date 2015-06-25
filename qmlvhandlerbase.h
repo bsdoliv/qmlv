@@ -112,11 +112,12 @@ public:
 	}
 
 protected:
-	QmlvData::Request	*reqst;
-	QmlvData::Response	*respn;
-
 	const QmlvData::Request &request() { return *reqst; }
 	QmlvData::Response *response() { return respn; }
+
+private:
+	QmlvData::Request	*reqst;
+	QmlvData::Response	*respn;
 };
 
 #endif /* QMLVHANDLERBASE_H */
