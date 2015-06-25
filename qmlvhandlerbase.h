@@ -80,15 +80,14 @@ namespace QmlvData
 Q_DECLARE_METATYPE(QmlvData::Request);
 Q_DECLARE_METATYPE(QmlvData::Response);
 
-
 class QmlvHandlerBase  : public QObject
 {
 	Q_OBJECT
 public:
-	void setResponse(QmlvData::Response* r) {
+	void setResponse(QmlvData::Response *r) {
 		respn = r;
 	}
-	void setRequest(QmlvData::Request* r) {
+	void setRequest(QmlvData::Request *r) {
 		reqst = r;
 	}
 	void setErrMsg(const QString &msg) {
