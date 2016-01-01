@@ -54,8 +54,8 @@
 **
 ****************************************************************************/
 
-#ifndef QMLVIEWER_H
-#define QMLVIEWER_H
+#ifndef QMLVIEWER_P_H
+#define QMLVIEWER_P_H
 
 #include <QtDeclarative/QDeclarativeView>
 
@@ -85,4 +85,4 @@ private:
 	struct		QmlViewerPrivate *d;
 };
 
-#endif /* QMLVIEWER_H */
+#endif /* QMLVIEWER_P_H */
