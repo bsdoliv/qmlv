@@ -9,57 +9,57 @@ int
 main(int argc, char **argv)
 {
 	QmlvApp				qapp(argc, argv, QmlvApp::Maximized);
-	QmlvData::DisplayStatesMap	map;
+	QmlvData::ViewStateMap		map;
 	LoginHandler			loginhdlr;
 	HomeHandler			homehdlr;
 	TicketHandler			tickethdlr;
 
 	/* same states names from qml */
-	map.insert(Login, QmlvData::StatesValue("login", "loginQmlView"));
-	map.insert(Home, QmlvData::StatesValue("home", "homeQmlView"));
-	map.insert(TicketKeyboard, QmlvData::StatesValue("TicketKeyboard",
+	map.insert(Login, QmlvData::StatePair("login", "loginQmlView"));
+	map.insert(Home, QmlvData::StatePair("home", "homeQmlView"));
+	map.insert(TicketKeyboard, QmlvData::StatePair("TicketKeyboard",
 	    "ticketQmlView"));
 	map.insert(TicketDialogConfirm,
-	    QmlvData::StatesValue("TicketDialogConfirm", "ticketQmlView"));
+	    QmlvData::StatePair("TicketDialogConfirm", "ticketQmlView"));
 	map.insert(TicketAddCodeKeyboard,
-	    QmlvData::StatesValue("TicketAddCodeKeyboard",
+	    QmlvData::StatePair("TicketAddCodeKeyboard",
 	    "ticketQmlView"));
 	map.insert(TicketAddCreditDialogConfirm,
-	    QmlvData::StatesValue("TicketAddCreditDialogConfirm",
+	    QmlvData::StatePair("TicketAddCreditDialogConfirm",
 	    "ticketQmlView"));
 	map.insert(TicketAddCreditKeyboard,
-	    QmlvData::StatesValue("TicketAddCreditKeyboard",
+	    QmlvData::StatePair("TicketAddCreditKeyboard",
 	    "ticketQmlView"));
-	map.insert(TicketAddCredit, QmlvData::StatesValue("TicketAddCredit",
+	map.insert(TicketAddCredit, QmlvData::StatePair("TicketAddCredit",
 	    "ticketQmlView"));
 	map.insert(TicketCloseCodeKeyboard,
-	    QmlvData::StatesValue("TicketCloseCodeKeyboard",
+	    QmlvData::StatePair("TicketCloseCodeKeyboard",
 	    "ticketQmlView"));
 	map.insert(TicketCloseValidateCode,
-	    QmlvData::StatesValue("TicketCloseValidateCode",
+	    QmlvData::StatePair("TicketCloseValidateCode",
 	    "ticketQmlView"));
 	map.insert(TicketCloseConfirm,
-	    QmlvData::StatesValue("TicketCloseConfirm",
+	    QmlvData::StatePair("TicketCloseConfirm",
 	    "ticketQmlView"));
-	map.insert(People, QmlvData::StatesValue("People", "homeQmlView"));
-	map.insert(Close, QmlvData::StatesValue("Close", "homeQmlView"));
-	map.insert(Consult, QmlvData::StatesValue("Consult",
+	map.insert(People, QmlvData::StatePair("People", "homeQmlView"));
+	map.insert(Close, QmlvData::StatePair("Close", "homeQmlView"));
+	map.insert(Consult, QmlvData::StatePair("Consult",
 	    "homeQmlView"));
 	map.insert(Accounting,
-	    QmlvData::StatesValue("Accounting", "homeQmlView"));
-	map.insert(File, QmlvData::StatesValue("File", "homeQmlView"));
-	map.insert(Config, QmlvData::StatesValue("Config", "homeQmlView"));
-	map.insert(Cash, QmlvData::StatesValue("Cash", "homeQmlView"));
+	    QmlvData::StatePair("Accounting", "homeQmlView"));
+	map.insert(File, QmlvData::StatePair("File", "homeQmlView"));
+	map.insert(Config, QmlvData::StatePair("Config", "homeQmlView"));
+	map.insert(Cash, QmlvData::StatePair("Cash", "homeQmlView"));
 
-	qapp.setDisplayStatesMap(&map);
-	qapp.setDisplayQml("qml/main.qml");
+	qapp.setStateMap(&map);
+	qapp.setQml("qml/main.qml");
 
 	/* on registerHandler() use same name of qml objectName() */
 	qapp.registerHandler("loginQmlView", &loginhdlr);
 	qapp.registerHandler("homeQmlView", &homehdlr);
 	qapp.registerHandler("ticketQmlView", &tickethdlr);
 
-	qapp.setDisplayState(Login);
+	qapp.setState(Login);
 
 	return qapp.exec();
 }
