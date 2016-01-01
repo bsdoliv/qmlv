@@ -18,9 +18,21 @@
 #define QMLVAPP_H
 
 #include <QApplication>
+#include <QVariant>
 
-#include "qmlvapp.h"
-#include "qmlvhandlerbase.h"
+namespace QmlvData {
+	class ViewStateMap;
+	class Request;
+	class Response;
+};
+
+class QmlvAppBase : public QObject
+{
+	Q_OBJECT
+public:
+		QmlvAppBase(QObject *);
+	void	render(QmlvData::Response *);
+};
 
 class QmlvApp : public QApplication
 { 

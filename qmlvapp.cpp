@@ -25,14 +25,7 @@
 
 #include "qmlvapp.h"
 #include "qmlviewer_p.h"
-
-class QmlvAppBase : public QObject
-{
-	Q_OBJECT
-public:
-		QmlvAppBase(QObject *);
-	void	render(QmlvData::Response *);
-};
+#include "qmlvhandlerbase.h"
 
 struct QmlvAppPrivate 
 {
